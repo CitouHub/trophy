@@ -1,5 +1,4 @@
-﻿using Trophy.Data;
-using Trophy.Test.Helper;
+﻿using Trophy.Test.Helper;
 using Trophy.Service;
 
 namespace Trophy.Test.Service
