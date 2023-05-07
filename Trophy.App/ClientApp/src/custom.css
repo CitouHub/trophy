@@ -1,0 +1,41 @@
+/* Provide sufficient contrast against white background */
+a {
+  color: #0366d6;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+    text-align: center;
+}
+
+code {
+  color: #E01A76;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+.layout {
+    margin-top: 2rem;
+    width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.center {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.ranking {
+    display: flex;
+    justify-content: space-between;
+}
+
+.losers-toggle {
+    color: #1976d2;
+    cursor: pointer;
+}
