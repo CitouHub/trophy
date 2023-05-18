@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import Accordion from '@mui/material/Accordion';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
 import Skeleton from '@mui/material/Skeleton';
 
 import * as RankingService from '../service/ranking.service'
@@ -17,6 +20,7 @@ export const Ranking = () => {
     const [showAll, setShowAll] = useState(false);
     const [touchStart, setTouchStart] = useState(null);
     const [touchEnd, setTouchEnd] = useState(null);
+    const [animationActive, setAnimationActive] = useState(false);
 
     const selectRanking = (event, rankingId) => {
         setTransitionEffect('fade-in');
@@ -47,6 +51,12 @@ export const Ranking = () => {
         }
     }
 
+    const enableAnimation = (duration) => {
+        setAnimationActive(true)
+        setTimeout(() => setAnimationActive(false), duration);
+
+    }
+
     useEffect(() => {
         setLoading(true);
             RankingService.getRankings().then((result) => {
@@ -56,6 +66,7 @@ export const Ranking = () => {
     }, []);
 
     useEffect(() => {
+        enableAnimation(500);
         setSelectedRanking(rankings[selectedRankingId] ?? []);
     }, [rankings, selectedRankingId]);
 
@@ -98,12 +109,25 @@ export const Ranking = () => {
                     onTouchMove={onTouchMove}
                 >
                     {[...selectedRanking].splice(0, (showAll ? 100 : rankingLimit)).map(_ => (
-                        <div key={_.player} className={'statistics-item ' + transitionEffect}>
-                            <p>{_.player}</p>
-                            <p>{_.value} {_.unit}</p>
-                        </div>
+                        <Accordion key={_.player}
+                            className={ animationActive ? transitionEffect : '' }
+                            sx={{ pointerEvents: 'none' }}
+                            expanded={ false }>
+                            <AccordionSummary>
+                                <div className='statistics-item'>
+                                    <span>{_.player}</span>
+                                    <span>{_.value} {_.unit}</span>
+                                </div>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                <div className='statistics-item'>
+                                    <span>NOT USED</span>
+                                </div>
+                            </AccordionDetails>
+                        </Accordion>
                     ))}
-                    {selectedRanking.length > rankingLimit && <p className='more-toggle' onClick={() => {
+                    {selectedRanking.length > rankingLimit && <p className='more-toggle pt-3' onClick={() => {
+                        enableAnimation(1000);
                         setShowAll(!showAll);
                         setTransitionEffect('fade-in');
                     }}

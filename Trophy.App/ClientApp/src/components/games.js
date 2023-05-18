@@ -39,10 +39,7 @@ export const Games = () => {
                             className='fade-in'
                             expanded={expandedGame === _.id}
                             onChange={() => handleExpandChange(_.id)} >
-                            <AccordionSummary
-                                aria-controls="panel1bh-content"
-                                id="panel1bh-header"
-                            >
+                            <AccordionSummary>
                                 <div className='statistics-item'>
                                     <span>{_.playerResults[0].playerName} - {_.playerResults[1].playerName}</span>
                                     <span>{_.playerResults[0].score} - {_.playerResults[1].score}</span>
@@ -63,9 +60,9 @@ export const Games = () => {
                 </React.Fragment>}
             </div>
             {loading && <div>
-                <Skeleton animation="wave" variant="text" sx={{ fontSize: '2.5rem' }} />
-                <Skeleton animation="wave" variant="text" sx={{ fontSize: '2.5rem' }} />
-                <Skeleton animation="wave" variant="text" sx={{ fontSize: '2.5rem' }} />
+                <Skeleton animation="wave" variant="text" sx={{ fontSize: '2.7rem' }} />
+                <Skeleton animation="wave" variant="text" sx={{ fontSize: '2.7rem' }} />
+                <Skeleton animation="wave" variant="text" sx={{ fontSize: '2.7rem' }} />
             </div>}
         </React.Fragment>
     );
