@@ -1,16 +1,39 @@
 ﻿using Trophy.Test.Helper;
 using Trophy.Service;
+using NSubstitute;
+using Microsoft.Extensions.DependencyInjection;
+using Trophy.Data;
 
 namespace Trophy.Test.Service
 {
     public class RankingServiceTest
     {
+        private readonly IServiceProvider _serviceProvider = Substitute.For<IServiceProvider>();
+        private readonly IServiceScopeFactory _serviceScopeFactory = Substitute.For<IServiceScopeFactory>();
+        private readonly IServiceScope _serviceScope = Substitute.For<IServiceScope>();
+
+        private TrophyDbContext SetupDatabaseContext()
+        {
+            var context = DatabaseHelper.GetContext();
+
+            _serviceProvider.GetService(typeof(IServiceScopeFactory)).Returns(_serviceScopeFactory);
+            _serviceProvider.GetService<IServiceScopeFactory>().Returns(_serviceScopeFactory);
+            _serviceProvider.GetRequiredService(typeof(IServiceScopeFactory)).Returns(_serviceScopeFactory);
+            _serviceProvider.GetRequiredService<IServiceScopeFactory>().Returns(_serviceScopeFactory);
+            _serviceProvider.CreateScope().Returns(_serviceScope);
+            _serviceScope.ServiceProvider.Returns(_serviceProvider);
+
+            _serviceProvider.GetService(typeof(TrophyDbContext)).Returns(context);
+            _serviceProvider.GetService<TrophyDbContext>().Returns(context);
+            return context;
+        }
+
         [Fact]
         public async Task GetByWinCountAsync_NoData()
         {
             //Arrange
-            var context = DatabaseHelper.GetContext();
-            var service = new RankingService(context);
+            SetupDatabaseContext();
+            var service = new RankingService(_serviceProvider);
 
             //Act
             var ranking = await service.GetByWinCountAsync();
@@ -23,8 +46,8 @@ namespace Trophy.Test.Service
         public async Task GetByWinCountAsync_NoGames()
         {
             //Arrange
-            var context = DatabaseHelper.GetContext();
-            var service = new RankingService(context);
+            var context = SetupDatabaseContext();
+            var service = new RankingService(_serviceProvider);
             await GameHelper.AddPlayer(context, "Player");
 
             //Act
@@ -38,8 +61,8 @@ namespace Trophy.Test.Service
         public async Task GetByWinCountAsync()
         {
             //Arrange
-            var context = DatabaseHelper.GetContext();
-            var service = new RankingService(context);
+            var context = SetupDatabaseContext();
+            var service = new RankingService(_serviceProvider);
             var player1 = "P1";
             var player2 = "P2";
             var player3 = "P3";
@@ -72,8 +95,8 @@ namespace Trophy.Test.Service
         public async Task GetByWinRateAsync_NoData()
         {
             //Arrange
-            var context = DatabaseHelper.GetContext();
-            var service = new RankingService(context);
+            var context = SetupDatabaseContext();
+            var service = new RankingService(_serviceProvider);
 
             //Act
             var ranking = await service.GetByWinRateAsync();
@@ -86,8 +109,8 @@ namespace Trophy.Test.Service
         public async Task GetByWinRateAsync_NoGames()
         {
             //Arrange
-            var context = DatabaseHelper.GetContext();
-            var service = new RankingService(context);
+            var context = SetupDatabaseContext();
+            var service = new RankingService(_serviceProvider);
             await GameHelper.AddPlayer(context, "Player");
 
             //Act
@@ -101,8 +124,8 @@ namespace Trophy.Test.Service
         public async Task GetByWinRateAsync()
         {
             //Arrange
-            var context = DatabaseHelper.GetContext();
-            var service = new RankingService(context);
+            var context = SetupDatabaseContext();
+            var service = new RankingService(_serviceProvider);
             var player1 = "P1";
             var player2 = "P2";
             var player3 = "P3";
@@ -137,8 +160,8 @@ namespace Trophy.Test.Service
         public async Task GetByWinSizeAsync_NoData()
         {
             //Arrange
-            var context = DatabaseHelper.GetContext();
-            var service = new RankingService(context);
+            var context = SetupDatabaseContext();
+            var service = new RankingService(_serviceProvider);
 
             //Act
             var ranking = await service.GetByWinSizeAsync();
@@ -151,8 +174,8 @@ namespace Trophy.Test.Service
         public async Task GetByWinSizeAsync_NoGames()
         {
             //Arrange
-            var context = DatabaseHelper.GetContext();
-            var service = new RankingService(context);
+            var context = SetupDatabaseContext();
+            var service = new RankingService(_serviceProvider);
             await GameHelper.AddPlayer(context, "Player");
 
             //Act
@@ -166,8 +189,8 @@ namespace Trophy.Test.Service
         public async Task GetByWinSizeAsync()
         {
             //Arrange
-            var context = DatabaseHelper.GetContext();
-            var service = new RankingService(context);
+            var context = SetupDatabaseContext();
+            var service = new RankingService(_serviceProvider);
             var player1 = "P1";
             var player2 = "P2";
             var player3 = "P3";
@@ -203,8 +226,8 @@ namespace Trophy.Test.Service
         public async Task GetByPointCountAsync_NoData()
         {
             //Arrange
-            var context = DatabaseHelper.GetContext();
-            var service = new RankingService(context);
+            var context = SetupDatabaseContext();
+            var service = new RankingService(_serviceProvider);
 
             //Act
             var ranking = await service.GetByPointCountAsync();
@@ -217,8 +240,8 @@ namespace Trophy.Test.Service
         public async Task GetByPointCountAsync_NoGames()
         {
             //Arrange
-            var context = DatabaseHelper.GetContext();
-            var service = new RankingService(context);
+            var context = SetupDatabaseContext();
+            var service = new RankingService(_serviceProvider);
             await GameHelper.AddPlayer(context, "Player");
 
             //Act
@@ -232,8 +255,8 @@ namespace Trophy.Test.Service
         public async Task GetByPointCountAsync()
         {
             //Arrange
-            var context = DatabaseHelper.GetContext();
-            var service = new RankingService(context);
+            var context = SetupDatabaseContext();
+            var service = new RankingService(_serviceProvider);
             var player1 = "P1";
             var player2 = "P2";
             var player3 = "P3";
@@ -266,8 +289,8 @@ namespace Trophy.Test.Service
         public async Task GetByWinStreakAsync_NoData()
         {
             //Arrange
-            var context = DatabaseHelper.GetContext();
-            var service = new RankingService(context);
+            var context = SetupDatabaseContext();
+            var service = new RankingService(_serviceProvider);
 
             //Act
             var ranking = await service.GetByWinStreakAsync();
@@ -280,8 +303,8 @@ namespace Trophy.Test.Service
         public async Task GetByWinStreakAsync_NoGames()
         {
             //Arrange
-            var context = DatabaseHelper.GetContext();
-            var service = new RankingService(context);
+            var context = SetupDatabaseContext();
+            var service = new RankingService(_serviceProvider);
             await GameHelper.AddPlayer(context, "Player");
 
             //Act
@@ -295,8 +318,8 @@ namespace Trophy.Test.Service
         public async Task GetByWinStreakAsync()
         {
             //Arrange
-            var context = DatabaseHelper.GetContext();
-            var service = new RankingService(context);
+            var context = SetupDatabaseContext();
+            var service = new RankingService(_serviceProvider);
             var player1 = "P1";
             var player2 = "P2";
             var player3 = "P3";
@@ -339,8 +362,8 @@ namespace Trophy.Test.Service
         public async Task GetByTrophyTimeAsync_NoData()
         {
             //Arrange
-            var context = DatabaseHelper.GetContext();
-            var service = new RankingService(context);
+            var context = SetupDatabaseContext();
+            var service = new RankingService(_serviceProvider);
 
             //Act
             var ranking = await service.GetByTrophyTimeAsync(DateTime.UtcNow);
@@ -353,8 +376,8 @@ namespace Trophy.Test.Service
         public async Task GetByTrophyTimeAsync_NoGames()
         {
             //Arrange
-            var context = DatabaseHelper.GetContext();
-            var service = new RankingService(context);
+            var context = SetupDatabaseContext();
+            var service = new RankingService(_serviceProvider);
             await GameHelper.AddPlayer(context, "Player");
 
             //Act
@@ -368,8 +391,8 @@ namespace Trophy.Test.Service
         public async Task GetByTrophyTimeAsync()
         {
             //Arrange
-            var context = DatabaseHelper.GetContext();
-            var service = new RankingService(context);
+            var context = SetupDatabaseContext();
+            var service = new RankingService(_serviceProvider);
             var player1 = "P1";
             var player2 = "P2";
             var player3 = "P3";

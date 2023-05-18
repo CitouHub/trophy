@@ -1,10 +1,16 @@
 /* Provide sufficient contrast against white background */
+html, body {
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
 a {
-  color: #0366d6;
+    color: #0366d6;
 }
 
 p, h1, h2, h3, h4, h5, h6 {
     text-align: center;
+    font-family: 'Roboto';
 }
 
 code {
@@ -30,9 +36,10 @@ code {
     justify-content: center;
 }
 
-.ranking {
+.statistics-item {
     display: flex;
     justify-content: space-between;
+    width: 100%;
 }
 
 .more-toggle {

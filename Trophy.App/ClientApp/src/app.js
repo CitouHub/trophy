@@ -4,6 +4,7 @@ import { Layout } from './components/layout';
 import { Dashboard } from './pages/dashborad';
 import { Register } from './pages/register';
 import './custom.css';
+import './effect.css';
 
 export const App = () => {
     

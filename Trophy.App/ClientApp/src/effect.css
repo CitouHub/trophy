@@ -1,0 +1,48 @@
+.fade-in {
+    animation-duration: 1s;
+    animation-name: fadeIn;
+}
+
+.slide-left {
+    animation-duration: 0.5s;
+    animation-name: slideLeft;
+}
+
+.slide-right {
+    animation-duration: 0.5s;
+    animation-name: slideRight;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideLeft {
+    from {
+        margin-left: -100vw;
+        width: 300%;
+    }
+
+    to {
+        margin-left: 0px;
+        width: 100%;
+    }
+}
+
+@keyframes slideRight {
+    from {
+        margin-left: 100vw;
+        width: 300%;
+    }
+
+    to {
+        margin-left: 0px;
+        width: 100%;
+    }
+}

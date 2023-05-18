@@ -30,6 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Trophy.Common\Trophy.Common.csproj" />
     <ProjectReference Include="..\Trophy.Data\Trophy.Data.csproj" />
     <ProjectReference Include="..\Trophy.Domain\Trophy.Domain.csproj" />
     <ProjectReference Include="..\Trophy.Service\Trophy.Service.csproj" />

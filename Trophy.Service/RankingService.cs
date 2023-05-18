@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Trophy.Data;
 using Trophy.Domain;
 
@@ -16,52 +17,63 @@ namespace Trophy.Service
 
     public class RankingService : IRankingService
     {
-        private readonly TrophyDbContext _context;
+        private readonly IServiceProvider _serviceProvider;
 
-        public RankingService(TrophyDbContext context)
+        public RankingService(IServiceProvider serviceProvider)
         {
-            _context = context;
+            _serviceProvider = serviceProvider;
         }
 
         public async Task<List<RankingDTO>> GetByWinCountAsync()
         {
-            var playerResult = await _context.PlayerResults.ToListAsync();
-            var players = await _context.Players.ToListAsync();
-            return players
-                .Select(p => new RankingDTO()
-                {
-                    Player = p.Name,
-                    Value = playerResult.Count(r => r.PlayerId == p.Id && r.Win),
-                    Unit = "Times"
-                }).OrderByDescending(_ => _.Value)
-                .ThenBy(_ => _.Player)
-                .ToList();
+            using (IServiceScope scope = _serviceProvider.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetService<TrophyDbContext>()!;
+                var playerResult = await context.PlayerResults.ToListAsync();
+                var players = await context.Players.ToListAsync();
+                return players
+                    .Select(p => new RankingDTO()
+                    {
+                        Player = p.Name,
+                        Value = playerResult.Count(r => r.PlayerId == p.Id && r.Win),
+                        Unit = "Times"
+                    }).OrderByDescending(_ => _.Value)
+                    .ThenBy(_ => _.Player)
+                    .ToList();
+            }
         }
 
         public async Task<List<RankingDTO>> GetByWinRateAsync()
         {
-            var winRate = await _context.PlayerResults
+            using (IServiceScope scope = _serviceProvider.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetService<TrophyDbContext>()!;
+                var winRate = await context.PlayerResults
                 .GroupBy(_ => _.Player.Id)
-                .Select(_ => new 
+                .Select(_ => new
                 {
                     Player = _.Key,
                     Rate = (decimal)Math.Round((_.Count(_ => _.Win) / (decimal)_.Count()) * 100, 2),
                 }).ToDictionaryAsync(_ => _.Player, _ => _.Rate);
-            
-            var players = await _context.Players.ToListAsync();
-            return players.Select(p => new RankingDTO()
+
+                var players = await context.Players.ToListAsync();
+                return players.Select(p => new RankingDTO()
                 {
                     Player = p.Name,
                     Value = winRate.ContainsKey(p.Id) ? winRate[p.Id] : 0,
                     Unit = "%"
                 }).OrderByDescending(_ => _.Value)
-                .ThenBy(_ => _.Player)
-                .ToList();
+                    .ThenBy(_ => _.Player)
+                    .ToList();
+            }
         }
 
         public async Task<List<RankingDTO>> GetByWinSizeAsync()
         {
-            var winSize = (await _context.PlayerResults
+            using (IServiceScope scope = _serviceProvider.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetService<TrophyDbContext>()!;
+                var winSize = (await context.PlayerResults
                 .GroupBy(_ => _.GameId)
                 .Select(_ => new
                 {
@@ -72,22 +84,26 @@ namespace Trophy.Service
                 .GroupBy(_ => _.Player)
                 .ToDictionary(_ => _.Key, _ => _.Max(x => x.Size));
 
-            var players = await _context.Players.ToListAsync();
-            return players
-                .Select(p => new RankingDTO()
-                {
-                    Player = p.Name,
-                    Value = winSize.ContainsKey(p.Id) ? winSize[p.Id] : 0,
-                    Unit = "Points"
-                })
-                .OrderByDescending(_ => _.Value)
-                .ThenBy(_ => _.Player)
-                .ToList();
+                var players = await context.Players.ToListAsync();
+                return players
+                    .Select(p => new RankingDTO()
+                    {
+                        Player = p.Name,
+                        Value = winSize.ContainsKey(p.Id) ? winSize[p.Id] : 0,
+                        Unit = "Points"
+                    })
+                    .OrderByDescending(_ => _.Value)
+                    .ThenBy(_ => _.Player)
+                    .ToList();
+            }
         }
 
         public async Task<List<RankingDTO>> GetByPointCountAsync()
         {
-            return await _context.Players
+            using (IServiceScope scope = _serviceProvider.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetService<TrophyDbContext>()!;
+                return await context.Players
                 .Select(_ => new RankingDTO()
                 {
                     Player = _.Name,
@@ -97,51 +113,56 @@ namespace Trophy.Service
                 .OrderByDescending(_ => _.Value)
                 .ThenBy(_ => _.Player)
                 .ToListAsync();
+            }
         }
 
         public async Task<List<RankingDTO>> GetByWinStreakAsync()
         {
-            var games = await _context.Games
+            using (IServiceScope scope = _serviceProvider.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetService<TrophyDbContext>()!;
+                var games = await context.Games
                 .Include(_ => _.PlayerResults)
                 .ThenInclude(_ => _.Player)
                 .OrderBy(_ => _.MatchDate)
                 .ToListAsync();
-            var rankings = await _context.Players
-                .Select(_ => new RankingDTO()
-                {
-                    Player = _.Name,
-                    Value = 0,
-                    Unit = "Wins"
-                }).ToListAsync();
-
-            var streaks = games.SelectMany(_ => _.PlayerResults)
-                .GroupBy(_ => _.Player.Name)
-                .ToDictionary(_ => _.Key, _ => 0);
-
-            foreach (var game in games)
-            {
-                foreach (var playerResult in game.PlayerResults)
-                {
-                    if (playerResult.Win == true)
+                var rankings = await context.Players
+                    .Select(_ => new RankingDTO()
                     {
-                        streaks[playerResult.Player.Name]++;
-                    }
-                    else
+                        Player = _.Name,
+                        Value = 0,
+                        Unit = "Wins"
+                    }).ToListAsync();
+
+                var streaks = games.SelectMany(_ => _.PlayerResults)
+                    .GroupBy(_ => _.Player.Name)
+                    .ToDictionary(_ => _.Key, _ => 0);
+
+                foreach (var game in games)
+                {
+                    foreach (var playerResult in game.PlayerResults)
                     {
-                        StreakBroken(rankings, streaks, playerResult.Player.Name);
+                        if (playerResult.Win == true)
+                        {
+                            streaks[playerResult.Player.Name]++;
+                        }
+                        else
+                        {
+                            StreakBroken(rankings, streaks, playerResult.Player.Name);
+                        }
                     }
                 }
-            }
 
-            foreach (var streak in streaks)
-            {
-                StreakBroken(rankings, streaks, streak.Key);
-            }
+                foreach (var streak in streaks)
+                {
+                    StreakBroken(rankings, streaks, streak.Key);
+                }
 
-            return rankings
-                .OrderByDescending(_ => _.Value)
-                .ThenBy(_ => _.Player)
-                .ToList();
+                return rankings
+                    .OrderByDescending(_ => _.Value)
+                    .ThenBy(_ => _.Player)
+                    .ToList();
+            }
         }
 
         private void StreakBroken(List<RankingDTO> rankings, Dictionary<string, int> streaks, string playerName)
@@ -156,38 +177,42 @@ namespace Trophy.Service
 
         public async Task<List<RankingDTO>> GetByTrophyTimeAsync(DateTime untilTime)
         {
-            var games = await _context.Games
+            using (IServiceScope scope = _serviceProvider.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetService<TrophyDbContext>()!;
+                var games = await context.Games
                 .Include(_ => _.PlayerResults)
                 .ThenInclude(_ => _.Player)
                 .OrderBy(_ => _.MatchDate)
                 .ToListAsync();
-            var rankings = await _context.Players
-                .Select(_ => new RankingDTO()
+                var rankings = await context.Players
+                    .Select(_ => new RankingDTO()
+                    {
+                        Player = _.Name,
+                        Value = 0,
+                        Unit = "Days"
+                    }).ToListAsync();
+
+                for (var i = 0; i < games.Count() - 1; i++)
                 {
-                    Player = _.Name,
-                    Value = 0,
-                    Unit = "Days"
-                }).ToListAsync();
+                    var game = games[i];
+                    var nextGame = games[i + 1];
+                    var holdingPlayer = game.PlayerResults.First(_ => _.Win).Player.Name;
+                    PassTrophy(rankings, game.MatchDate, nextGame.MatchDate, holdingPlayer);
+                }
 
-            for(var i = 0; i < games.Count() - 1; i++)
-            {
-                var game = games[i];
-                var nextGame = games[i + 1];
-                var holdingPlayer = game.PlayerResults.First(_ => _.Win).Player.Name;
-                PassTrophy(rankings, game.MatchDate, nextGame.MatchDate, holdingPlayer);
+                var lastGame = games.LastOrDefault();
+                if (lastGame != null)
+                {
+                    var currentHoldingPlayer = lastGame.PlayerResults.First(_ => _.Win).Player.Name;
+                    PassTrophy(rankings, lastGame.MatchDate, untilTime, currentHoldingPlayer);
+                }
+
+                return rankings
+                    .OrderByDescending(_ => _.Value)
+                    .ThenBy(_ => _.Player)
+                    .ToList();
             }
-
-            var lastGame = games.LastOrDefault();
-            if(lastGame != null)
-            {
-                var currentHoldingPlayer = lastGame.PlayerResults.First(_ => _.Win).Player.Name;
-                PassTrophy(rankings, lastGame.MatchDate, untilTime, currentHoldingPlayer);
-            }
-
-            return rankings
-                .OrderByDescending(_ => _.Value)
-                .ThenBy(_ => _.Player)
-                .ToList();
         }
 
         private void PassTrophy(List<RankingDTO> rankings, DateTime fromMatchDate, DateTime toMatchDate, string holdingPlayer)

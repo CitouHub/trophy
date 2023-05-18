@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Trophy.Common;
 using Trophy.Domain;
 using Trophy.Service;
 
@@ -16,45 +17,29 @@ namespace Trophy.Controllers
         }
 
         [HttpGet]
-        [Route("by/winstreak")]
-        public async Task<List<RankingDTO>> GetByWinStreakAsync()
+        [Route("")]
+        public async Task<Dictionary<short, List<RankingDTO>>> GetRankingsAsync()
         {
-            return await _rankingService.GetByWinStreakAsync();
-        }
+            var tasks = new List<Task<List<RankingDTO>>>
+            {
+                _rankingService.GetByWinCountAsync(),
+                _rankingService.GetByWinRateAsync(),
+                _rankingService.GetByWinStreakAsync(),
+                _rankingService.GetByWinSizeAsync(),
+                _rankingService.GetByTrophyTimeAsync(DateTime.UtcNow),
+                _rankingService.GetByPointCountAsync()
+            };
+            await Task.WhenAll(tasks.ToArray());
 
-        [HttpGet]
-        [Route("by/wincount")]
-        public async Task<List<RankingDTO>> GetByWinCountAsync()
-        {
-            return await _rankingService.GetByWinCountAsync();
-        }
-
-        [HttpGet]
-        [Route("by/winrate")]
-        public async Task<List<RankingDTO>> GetByWinRateAsync()
-        {
-            return await _rankingService.GetByWinRateAsync();
-        }
-
-        [HttpGet]
-        [Route("by/winsize")]
-        public async Task<List<RankingDTO>> GetByWinSizeAsync()
-        {
-            return await _rankingService.GetByWinSizeAsync();
-        }
-
-        [HttpGet]
-        [Route("by/trophytime")]
-        public async Task<List<RankingDTO>> GetByTrophyTimeAsync()
-        {
-            return await _rankingService.GetByTrophyTimeAsync(DateTime.UtcNow);
-        }
-
-        [HttpGet]
-        [Route("by/pointcount")]
-        public async Task<List<RankingDTO>> GetByPointCountAsync()
-        {
-            return await _rankingService.GetByPointCountAsync();
+            return new Dictionary<short, List<RankingDTO>>()
+            {
+                { (short)Ranking.ByWinCount, tasks[0].Result },
+                { (short)Ranking.ByWinRate, tasks[1].Result },
+                { (short)Ranking.ByWinStreak, tasks[2].Result },
+                { (short)Ranking.ByWinSize, tasks[3].Result },
+                { (short)Ranking.ByTrophyTime, tasks[4].Result },
+                { (short)Ranking.ByPointCount, tasks[5].Result },
+            };
         }
     }
 }

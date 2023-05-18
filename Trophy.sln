@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trophy.Service", "Trophy.Se
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trophy.Domain", "Trophy.Domain\Trophy.Domain.csproj", "{8D5BC272-A767-4B33-A1F3-E3F5E13A0C31}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trophy.Test", "Trophy.Test\Trophy.Test.csproj", "{D22CE4D9-96A2-4742-9B71-5E5F88806D5A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trophy.Test", "Trophy.Test\Trophy.Test.csproj", "{D22CE4D9-96A2-4742-9B71-5E5F88806D5A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trophy.Common", "Trophy.Common\Trophy.Common.csproj", "{DB6CA271-5D7B-4BF8-9334-24E1E38FB19E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{D22CE4D9-96A2-4742-9B71-5E5F88806D5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D22CE4D9-96A2-4742-9B71-5E5F88806D5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D22CE4D9-96A2-4742-9B71-5E5F88806D5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB6CA271-5D7B-4BF8-9334-24E1E38FB19E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB6CA271-5D7B-4BF8-9334-24E1E38FB19E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB6CA271-5D7B-4BF8-9334-24E1E38FB19E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB6CA271-5D7B-4BF8-9334-24E1E38FB19E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
