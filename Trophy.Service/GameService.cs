@@ -34,8 +34,12 @@ namespace Trophy.Service
         public async Task<List<GameDTO>> GetGamesAsync()
         {
             var games = await _context.Games
+                .Include(_ => _.PlayerResults)
+                .ThenInclude(_ => _.Player)
                 .OrderByDescending(_ => _.MatchDate)
+                .Take(100)
                 .ToArrayAsync();
+
             return _mapper.Map<List<GameDTO>>(games);
         }
 

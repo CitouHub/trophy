@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using AutoMapper;
+using FluentAssertions;
 using Trophy.Data;
 using Trophy.Domain;
 using Trophy.Service;
@@ -74,18 +75,78 @@ namespace Trophy.Test.Service
                 Location = "GetGamesAsync1",
                 MatchDate = DateTime.Now.AddMinutes(-10),
                 PlayerResults = new List<PlayerResult>()
+                {
+                    new PlayerResult()
+                    {
+                        Player = new Player()
+                        {
+                            Name = "Test 1",
+                        },
+                        Score = 1,
+                        Win = true
+                    },
+                    new PlayerResult()
+                    {
+                        Player = new Player()
+                        {
+                            Name = "Test 2",
+                        },
+                        Score = 0,
+                        Win = false
+                    }
+                }
             };
             var game2 = new Game()
             {
                 Location = "GetGamesAsync2",
                 MatchDate = DateTime.Now.AddMinutes(-30),
                 PlayerResults = new List<PlayerResult>()
+                {
+                    new PlayerResult()
+                    {
+                        Player = new Player()
+                        {
+                            Name = "Test 1",
+                        },
+                        Score = 0,
+                        Win = false
+                    },
+                    new PlayerResult()
+                    {
+                        Player = new Player()
+                        {
+                            Name = "Test 2",
+                        },
+                        Score = 1,
+                        Win = true
+                    }
+                }
             };
             var game3 = new Game()
             {
                 Location = "GetGamesAsync3",
                 MatchDate = DateTime.Now.AddMinutes(-20),
                 PlayerResults = new List<PlayerResult>()
+                {
+                    new PlayerResult()
+                    {
+                        Player = new Player()
+                        {
+                            Name = "Test 2",
+                        },
+                        Score = 0,
+                        Win = false
+                    },
+                    new PlayerResult()
+                    {
+                        Player = new Player()
+                        {
+                            Name = "Test 1",
+                        },
+                        Score = 1,
+                        Win = true
+                    }
+                }
             };
             await context.AddRangeAsync(game1, game2, game3);
             await context.SaveChangesAsync();
@@ -98,6 +159,13 @@ namespace Trophy.Test.Service
             Assert.Equal(game1.Location, games[0].Location);
             Assert.Equal(game2.Location, games[2].Location);
             Assert.Equal(game3.Location, games[1].Location);
+
+            games[0].PlayerResults[0].Should().BeEquivalentTo(_mapper.Map<PlayerResultDTO>(game1.PlayerResults.ToList()[0]));
+            games[0].PlayerResults[1].Should().BeEquivalentTo(_mapper.Map<PlayerResultDTO>(game1.PlayerResults.ToList()[1]));
+            games[2].PlayerResults[0].Should().BeEquivalentTo(_mapper.Map<PlayerResultDTO>(game2.PlayerResults.ToList()[1]));
+            games[2].PlayerResults[1].Should().BeEquivalentTo(_mapper.Map<PlayerResultDTO>(game2.PlayerResults.ToList()[0]));
+            games[1].PlayerResults[0].Should().BeEquivalentTo(_mapper.Map<PlayerResultDTO>(game3.PlayerResults.ToList()[1]));
+            games[1].PlayerResults[1].Should().BeEquivalentTo(_mapper.Map<PlayerResultDTO>(game3.PlayerResults.ToList()[0]));
         }
 
         [Fact]

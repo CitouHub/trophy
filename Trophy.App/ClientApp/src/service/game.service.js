@@ -8,3 +8,12 @@ export async function getTrophyHolder() {
         return Request.handleResponse(response)
     });
 }
+
+export async function getGames() {
+    return await Request.send({
+        url: `/api/game/`,
+        method: 'GET'
+    }).then((response) => {
+        return Request.handleResponse(response)
+    });
+}

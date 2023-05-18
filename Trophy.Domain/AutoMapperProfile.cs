@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Trophy.Data;
-using Trophy.Domain;
 
 namespace Trophy.Domain
 {
@@ -8,7 +7,9 @@ namespace Trophy.Domain
     {
         public AutoMapperProfile()
         {
-            CreateMap<Game, GameDTO>().ReverseMap();
+            CreateMap<Game, GameDTO>()
+                .ForMember(dest => dest.PlayerResults, opt => opt.MapFrom(src => src.PlayerResults.OrderByDescending(_ => _.Win)))
+                .ReverseMap();
             CreateMap<PlayerResult, PlayerResultDTO>().ReverseMap();
         }
     }
