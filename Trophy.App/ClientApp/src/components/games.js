@@ -31,9 +31,9 @@ export const Games = () => {
 
     return (
         <React.Fragment>
-            <div className='center flex-column pb-4'>
+            {!loading && <div className='center flex-column pb-4'>
                 <h3>Games</h3>
-                {!loading && <React.Fragment>
+                <React.Fragment>
                     {[...games].splice(0, (showAll ? 100 : gamesLimit)).map(_ => (
                         <Accordion key={_.id}
                             className='fade-in'
@@ -57,12 +57,7 @@ export const Games = () => {
                     {games.length > gamesLimit && <p className='more-toggle pt-3' onClick={() => setShowAll(!showAll)}>
                         {showAll ? 'Show less' : 'Show more'}
                     </p>}
-                </React.Fragment>}
-            </div>
-            {loading && <div>
-                <Skeleton animation="wave" variant="text" sx={{ fontSize: '2.7rem' }} />
-                <Skeleton animation="wave" variant="text" sx={{ fontSize: '2.7rem' }} />
-                <Skeleton animation="wave" variant="text" sx={{ fontSize: '2.7rem' }} />
+                </React.Fragment>
             </div>}
         </React.Fragment>
     );
