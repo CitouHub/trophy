@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
-import Skeleton from '@mui/material/Skeleton';
 import * as GameService from '../service/game.service'
 
 const gamesLimit = 5;
