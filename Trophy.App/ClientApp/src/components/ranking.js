@@ -136,10 +136,11 @@ export const Ranking = () => {
                 </div>
             </React.Fragment>}
             {loading && <div>
-                <Skeleton animation="wave" variant="text" sx={{ fontSize: '2.7rem' }} />
-                <Skeleton animation="wave" variant="text" sx={{ fontSize: '2.7rem' }} />
-                <Skeleton animation="wave" variant="text" sx={{ fontSize: '2.7rem' }} />
-                <Skeleton animation="wave" variant="text" sx={{ fontSize: '2.7rem' }} />
+                <Skeleton animation="wave" variant="rounded" width="80%" height={48} sx={{ marginLeft: 'auto', marginRight: 'auto' }} />
+                <Skeleton animation="wave" variant="rounded" height={48} sx={{ marginTop: '0.5rem', marginBottom: '0.5rem' }} />
+                <Skeleton animation="wave" variant="rounded" height={48} sx={{ marginTop: '0.5rem', marginBottom: '0.5rem' }} />
+                <Skeleton animation="wave" variant="rounded" height={48} sx={{ marginTop: '0.5rem', marginBottom: '0.5rem' }} />
+                <Skeleton animation="wave" variant="rounded" width="40%" height={15} sx={{ marginTop: '0.5rem', marginBottom: '3.1rem', marginLeft: 'auto', marginRight: 'auto' }} />
             </div>}
         </div>
     );
