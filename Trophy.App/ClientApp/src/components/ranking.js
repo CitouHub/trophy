@@ -5,13 +5,13 @@ import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Skeleton from '@mui/material/Skeleton';
-import * as RankingService from '../service/ranking.service'
+import * as RankingService from '../service/ranking.service';
 
 const rankingLimit = 3;
 const minSwipeDistance = 50
 
 export const Ranking = ({ playersCount }) => {
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [selectedRankingId, setSelectedRankingId] = useState("0");
     const [selectedRanking, setSelectedRanking] = useState([]);
     const [transitionEffect, setTransitionEffect] = useState('fade-in');
@@ -84,7 +84,7 @@ export const Ranking = ({ playersCount }) => {
     return (
         <div className='center flex-column'>
             <h3>Ranking</h3>
-            {!loading && <React.Fragment>
+            {!loading && [...selectedRanking].length > 0 && <React.Fragment>
                 <div className='center flex-row pb-3'>
                     <ToggleButtonGroup
                         color="primary"

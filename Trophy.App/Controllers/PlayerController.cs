@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Trophy.Domain;
 using Trophy.Service;
 
 namespace Trophy.Controllers
@@ -23,7 +24,7 @@ namespace Trophy.Controllers
 
         [HttpGet]
         [Route("")]
-        public async Task<List<string>> GetPlayersAsync()
+        public async Task<List<PlayerDTO>> GetPlayersAsync()
         {
             return await _playerService.GetPlayersAsync();
         }

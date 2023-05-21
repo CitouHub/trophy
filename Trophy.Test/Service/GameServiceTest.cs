@@ -35,15 +35,21 @@ namespace Trophy.Test.Service
                 {
                     new PlayerResultDTO
                     {
-                        PlayerId = 1,
-                        PlayerName = "P1",
+                        Player = new PlayerDTO()
+                        {
+                            Id = 1,
+                            Name = "P1",
+                        },
                         Score = 0,
                         Win = false
                     },
                     new PlayerResultDTO
                     {
-                        PlayerId = 2,
-                        PlayerName = "P2",
+                        Player = new PlayerDTO()
+                        {
+                            Id = 2,
+                            Name = "P2",
+                        },
                         Score = 1,
                         Win = false
                     },
@@ -60,8 +66,8 @@ namespace Trophy.Test.Service
             Assert.Equal(2, playerResults.Count());
             Assert.NotEqual(0, context.Games.First(_ => _.Location == gameDto.Location).Id);
             Assert.True(playerResults.All(_ => _.GameId == game[0].Id));
-            Assert.True(playerResults.First(_ => _.PlayerId == gameDto.PlayerResults.OrderByDescending(_ => _.Score).ToList()[0].PlayerId).Win);
-            Assert.False(playerResults.First(_ => _.PlayerId == gameDto.PlayerResults.OrderByDescending(_ => _.Score).ToList()[1].PlayerId).Win);
+            Assert.True(playerResults.First(_ => _.PlayerId == gameDto.PlayerResults.OrderByDescending(_ => _.Score).ToList()[0].Player!.Id).Win);
+            Assert.False(playerResults.First(_ => _.PlayerId == gameDto.PlayerResults.OrderByDescending(_ => _.Score).ToList()[1].Player!.Id).Win);
         }
 
         [Fact]

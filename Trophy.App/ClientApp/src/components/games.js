@@ -7,7 +7,7 @@ import * as GameService from '../service/game.service';
 const gamesLimit = 5;
 
 export const Games = () => {
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [games, setGames] = useState([]);
     const [showAll, setShowAll] = useState(false);
     const [expandedGame, setExpandedGame] = useState(0);
@@ -30,7 +30,7 @@ export const Games = () => {
 
     return (
         <React.Fragment>
-            {!loading && <div className='center flex-column pb-4'>
+            {!loading && games.length > 0 && <div className='center flex-column pb-4'>
                 <h3>Games</h3>
                 <React.Fragment>
                     {[...games].splice(0, (showAll ? 100 : gamesLimit)).map(_ => (
@@ -40,7 +40,7 @@ export const Games = () => {
                             onChange={() => handleExpandChange(_.id)} >
                             <AccordionSummary>
                                 <div className='statistics-item'>
-                                    <span>{_.playerResults[0].playerName} - {_.playerResults[1].playerName}</span>
+                                    <span>{_.playerResults[0].player.name} - {_.playerResults[1].player.name}</span>
                                     <span>{_.playerResults[0].score} - {_.playerResults[1].score}</span>
                                 </div>
                             </AccordionSummary>

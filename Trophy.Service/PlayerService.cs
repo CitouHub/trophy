@@ -1,21 +1,25 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Trophy.Data;
+using Trophy.Domain;
 
 namespace Trophy.Service
 {
     public interface IPlayerService
     {
-        Task<List<string>> GetPlayersAsync();
+        Task<List<PlayerDTO>> GetPlayersAsync();
         Task AddPlayerAsync(string name);
     }
 
     public class PlayerService : IPlayerService
     {
         private readonly TrophyDbContext _context;
+        private readonly IMapper _mapper;
 
-        public PlayerService(TrophyDbContext context)
+        public PlayerService(TrophyDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task AddPlayerAsync(string name)
@@ -25,12 +29,13 @@ namespace Trophy.Service
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<string>> GetPlayersAsync()
+        public async Task<List<PlayerDTO>> GetPlayersAsync()
         {
-            return await _context.Players
-                .Select(_ => _.Name)
-                .OrderBy(_ => _)
+            var players = await _context.Players
+                .OrderBy(_ => _.Name)
                 .ToListAsync();
+
+            return _mapper.Map<List<PlayerDTO>>(players);
         }
     }
 }

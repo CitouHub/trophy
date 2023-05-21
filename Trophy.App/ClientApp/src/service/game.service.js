@@ -9,6 +9,16 @@ export async function getTrophyHolder() {
     });
 }
 
+export async function addGame(game) {
+    return await Request.send({
+        url: `/api/game/`,
+        method: 'POST',
+        data: game,
+    }).then((response) => {
+        return Request.handleResponse(response)
+    });
+}
+
 export async function getGames() {
     return await Request.send({
         url: `/api/game/`,

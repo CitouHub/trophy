@@ -1,4 +1,6 @@
-﻿using Trophy.Data;
+﻿using AutoMapper;
+using Trophy.Data;
+using Trophy.Domain;
 using Trophy.Service;
 using Trophy.Test.Helper;
 
@@ -6,12 +8,24 @@ namespace Trophy.Test.Service
 {
     public class PlayerServiceTest
     {
+        private readonly IMapper _mapper;
+
+        public PlayerServiceTest()
+        {
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new AutoMapperProfile());
+            });
+            _mapper = mapperConfig.CreateMapper();
+        }
+
+
         [Fact]
         public async Task AddPlayerAsync()
         {
             //Arrange
             var context = DatabaseHelper.GetContext();
-            var service = new PlayerService(context);
+            var service = new PlayerService(context, _mapper);
             var player = "AddPlayerAsync";
 
             //Act
@@ -27,7 +41,7 @@ namespace Trophy.Test.Service
         {
             //Arrange
             var context = DatabaseHelper.GetContext();
-            var service = new PlayerService(context);
+            var service = new PlayerService(context, _mapper);
             var player1 = new Player() { Name = "AddPlayerAsyncA" };
             var player2 = new Player() { Name = "AddPlayerAsyncC" };
             var player3 = new Player() { Name = "AddPlayerAsyncB" };
@@ -39,9 +53,9 @@ namespace Trophy.Test.Service
 
             //Assert
             Assert.Equal(3, players.Count());
-            Assert.Equal(player1.Name, players[0]);
-            Assert.Equal(player2.Name, players[2]);
-            Assert.Equal(player3.Name, players[1]);
+            Assert.Equal(player1.Name, players[0].Name);
+            Assert.Equal(player2.Name, players[2].Name);
+            Assert.Equal(player3.Name, players[1].Name);
         }
     }
 }

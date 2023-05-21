@@ -18,11 +18,11 @@ export const Dashboard = () => {
 
     if (!loading) {
         return (
-            <React.Fragment>
+            <div className='pt-4'>
                 <TrophyHolder />
                 <Ranking playersCount={players.length} />
                 <Games />
-            </React.Fragment>
+            </div>
         );
     } else {
         return null
