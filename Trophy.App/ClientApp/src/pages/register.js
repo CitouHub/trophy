@@ -49,6 +49,10 @@ export const Register = () => {
         });
     }
 
+    const addPlayer = (player) => {
+        let
+    }
+
     if (!loading) {
         return (
             <div className='center flex-column h-100'>
@@ -87,7 +91,7 @@ export const Register = () => {
                 >
                     Submit game
                 </LoadingButton>
-                <AddPlayerDialog open={addPlayerDialogOpen} closeDialog={() => setAddPlayerDialogOpen(false)} />
+                <AddPlayerDialog players={players} addPlayer= open={addPlayerDialogOpen} closeDialog={() => setAddPlayerDialogOpen(false)} />
             </div>
         );
     } else {
