@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
-import * as GameService from '../service/game.service'
+import * as GameService from '../service/game.service';
 
 const gamesLimit = 5;
 
@@ -25,8 +25,8 @@ export const Games = () => {
         GameService.getGames().then((result) => {
             setGames(result);
             setLoading(false);
-        })
-    }, [])
+        });
+    }, []);
 
     return (
         <React.Fragment>

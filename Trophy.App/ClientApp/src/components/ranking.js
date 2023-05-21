@@ -10,7 +10,7 @@ import * as RankingService from '../service/ranking.service'
 const rankingLimit = 3;
 const minSwipeDistance = 50
 
-export const Ranking = () => {
+export const Ranking = ({ playersCount }) => {
     const [loading, setLoading] = useState(false);
     const [selectedRankingId, setSelectedRankingId] = useState("0");
     const [selectedRanking, setSelectedRanking] = useState([]);
@@ -102,7 +102,7 @@ export const Ranking = () => {
                         <ToggleButton value="5">06</ToggleButton>
                     </ToggleButtonGroup>
                 </div>
-                <div className='center flex-column pb-4'
+                <div className='center flex-column mb-4'
                     onTouchStart={onTouchStart}
                     onTouchEnd={onTouchEnd}
                     onTouchMove={onTouchMove}
@@ -125,22 +125,24 @@ export const Ranking = () => {
                             </AccordionDetails>
                         </Accordion>
                     ))}
-                    {selectedRanking.length > rankingLimit && <p className='more-toggle pt-3' onClick={() => {
+                    {playersCount > rankingLimit && <span className='more-toggle mt-3' onClick={() => {
                         enableAnimation(1000);
                         setShowAll(!showAll);
                         setTransitionEffect('fade-in');
                     }}
                     >
                         {showAll ? 'Show less' : 'Show more'}
-                    </p>}
+                    </span>}
                 </div>
             </React.Fragment>}
-            {loading && <div>
-                <Skeleton animation="wave" variant="rounded" width="80%" height={48} sx={{ marginLeft: 'auto', marginRight: 'auto' }} />
-                <Skeleton animation="wave" variant="rounded" height={48} sx={{ marginTop: '0.5rem', marginBottom: '0.5rem' }} />
-                <Skeleton animation="wave" variant="rounded" height={48} sx={{ marginTop: '0.5rem', marginBottom: '0.5rem' }} />
-                <Skeleton animation="wave" variant="rounded" height={48} sx={{ marginTop: '0.5rem', marginBottom: '0.5rem' }} />
-                <Skeleton animation="wave" variant="rounded" width="40%" height={15} sx={{ marginTop: '0.5rem', marginBottom: '3.1rem', marginLeft: 'auto', marginRight: 'auto' }} />
+            {loading && <div className="mb-4" >
+                <Skeleton animation="wave" variant="rounded" width="80%" height={48} className="my-1 mx-auto" />
+
+                {[...Array(playersCount > rankingLimit ? rankingLimit : playersCount).keys()].map(_ => (
+                    <Skeleton key={_} animation="wave" variant="rounded" width="100%" height={48} className="my-1" />
+                ))}
+
+                {playersCount > rankingLimit && <Skeleton animation="wave" variant="rounded" width="40%" height={24} className="mt-3 mx-auto" />}
             </div>}
         </div>
     );
