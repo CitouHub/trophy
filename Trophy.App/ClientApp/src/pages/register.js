@@ -4,7 +4,6 @@ import TextField from '@mui/material/TextField';
 import LoadingButton from '@mui/lab/LoadingButton';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import { PlayerResult } from '../components/player-result.input';
-import { AddPlayerDialog } from '../components/add-player.dialog';
 import * as PlayerService from '../service/player.service';
 import * as GameService from '../service/game.service';
 
@@ -14,7 +13,6 @@ export const Register = () => {
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [players, setPlayers] = useState([]);
-    const [addPlayerDialogOpen, setAddPlayerDialogOpen] = useState(false);
     const [player1Result, setPlayer1Result] = useState({ player: { id: 0 }, score: 0 });
     const [player2Result, setPlayer2Result] = useState({ player: { id: 0 }, score: 0 });
     const [game, setGame] = useState({ location: '', mathcDate: new Date() });
@@ -49,8 +47,10 @@ export const Register = () => {
         });
     }
 
-    const addPlayer = (player) => {
-        let
+    const updatePlayerList = (player) => {
+        let newPlayers = [...players];
+        newPlayers.push(player);
+        setPlayers(newPlayers);
     }
 
     if (!loading) {
@@ -62,7 +62,7 @@ export const Register = () => {
                     players={players}
                     playerResult={player1Result}
                     setPlayerResult={result => setPlayer1Result(result)}
-                    addPlayer={() => setAddPlayerDialogOpen(true)}
+                    updatePlayerList={updatePlayerList}
                 />
                 <h1>vs.</h1>
                 <PlayerResult
@@ -70,7 +70,7 @@ export const Register = () => {
                     players={players}
                     playerResult={player2Result}
                     setPlayerResult={result => setPlayer2Result(result)}
-                    addPlayer={() => setAddPlayerDialogOpen(true)}
+                    updatePlayerList={updatePlayerList}
                 />
                 <TextField
                     sx={{ marginTop: '1rem', width: '100%' }}
@@ -91,7 +91,6 @@ export const Register = () => {
                 >
                     Submit game
                 </LoadingButton>
-                <AddPlayerDialog players={players} addPlayer= open={addPlayerDialogOpen} closeDialog={() => setAddPlayerDialogOpen(false)} />
             </div>
         );
     } else {

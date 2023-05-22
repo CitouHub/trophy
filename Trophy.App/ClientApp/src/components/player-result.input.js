@@ -1,11 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
+import { AddPlayerDialog } from '../components/add-player.dialog';
 
-export const PlayerResult = ({ title, players, playerResult, setPlayerResult, addPlayer }) => {
+export const PlayerResult = ({ title, players, playerResult, setPlayerResult, updatePlayerList }) => {
+    const [addPlayerDialogOpen, setAddPlayerDialogOpen] = useState(false);
+
+    const handleNewPlayerAdded = (player, existing) => {
+        if (!existing) {
+            updatePlayerList(player);
+        }
+        setPlayerResult({ ...playerResult, player: { id: player.id } })
+    }
 
     return (
         <div className='center flex-row'>
@@ -18,9 +27,9 @@ export const PlayerResult = ({ title, players, playerResult, setPlayerResult, ad
                     label={title}
                     onChange={e => {
                         if (e.target.value !== -1) {
-                            setPlayerResult({ ...playerResult, player: { id: e.target.value } })
+                            setPlayerResult({ ...playerResult, player: { id: e.target.value } });
                         } else {
-                            addPlayer();
+                            setAddPlayerDialogOpen(true);
                         }
                     }}>
                     {players.map(p => (
@@ -33,12 +42,17 @@ export const PlayerResult = ({ title, players, playerResult, setPlayerResult, ad
                 sx={{ width: '20%' }}
                 label="Score"
                 id="player-score"
+                type="tel"
                 size="small"
-                type="number"
-                InputLabelProps={{
-                    shrink: true,
-                }}
+                InputLabelProps={{ shrink: true }}
+                inputProps={{ maxLength: 3 }}
                 onChange={e => setPlayerResult({ ...playerResult, score: e.target.value })}
+            />
+            <AddPlayerDialog
+                players={players}
+                open={addPlayerDialogOpen}
+                closeDialog={() => setAddPlayerDialogOpen(false)}
+                handleNewPlayerAdded={handleNewPlayerAdded}
             />
         </div>
     );

@@ -29,11 +29,12 @@ namespace Trophy.Test.Service
             var player = "AddPlayerAsync";
 
             //Act
-            await service.AddPlayerAsync(player);
+            var addedPlayer = await service.AddPlayerAsync(player);
 
             //Assert
             Assert.Single(context.Players);
             Assert.True(context.Players.Any(_ => _.Name == player));
+            Assert.Equal(player, addedPlayer.Name);
         }
 
         [Fact]

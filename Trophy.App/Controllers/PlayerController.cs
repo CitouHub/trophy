@@ -17,9 +17,9 @@ namespace Trophy.Controllers
 
         [HttpPost]
         [Route("{name}")]
-        public async Task AddPlayerAsync(string name)
+        public async Task<PlayerDTO?> AddPlayerAsync(string name)
         {
-            await _playerService.AddPlayerAsync(name);
+            return await _playerService.AddPlayerAsync(name);
         }
 
         [HttpGet]

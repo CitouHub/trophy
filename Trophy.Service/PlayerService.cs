@@ -8,7 +8,7 @@ namespace Trophy.Service
     public interface IPlayerService
     {
         Task<List<PlayerDTO>> GetPlayersAsync();
-        Task AddPlayerAsync(string name);
+        Task<PlayerDTO?> AddPlayerAsync(string name);
     }
 
     public class PlayerService : IPlayerService
@@ -22,11 +22,18 @@ namespace Trophy.Service
             _mapper = mapper;
         }
 
-        public async Task AddPlayerAsync(string name)
+        public async Task<PlayerDTO?> AddPlayerAsync(string name)
         {
-            await _context.Players
-                .AddAsync(new Player { Name = name });
-            await _context.SaveChangesAsync();
+            if(!await _context.Players.AnyAsync(_ => _.Name == name)) 
+            {
+                var player = new Player { Name = name };
+                await _context.Players.AddAsync(player);
+                await _context.SaveChangesAsync();
+
+                return _mapper.Map<PlayerDTO>(player);
+            }
+
+            return null;
         }
 
         public async Task<List<PlayerDTO>> GetPlayersAsync()

@@ -14,7 +14,7 @@ export const Dashboard = () => {
             setPlayers(result);
             setLoading(false);
         })
-    }, [])
+    }, []);
 
     if (!loading) {
         return (
