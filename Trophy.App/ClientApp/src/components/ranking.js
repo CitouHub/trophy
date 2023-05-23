@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import IconButton from '@mui/material/IconButton';
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -21,11 +22,6 @@ export const Ranking = ({ playersCount }) => {
     const [touchEnd, setTouchEnd] = useState(null);
     const [animationActive, setAnimationActive] = useState(false);
 
-    const selectRanking = (event, rankingId) => {
-        setTransitionEffect('fade-in');
-        setSelectedRankingId(rankingId);
-    };
-
     const onTouchStart = (e) => {
         setTouchEnd(null)
         setTouchStart(e.targetTouches[0].clientX)
@@ -39,15 +35,23 @@ export const Ranking = ({ playersCount }) => {
         const isLeftSwipe = distance > minSwipeDistance
         const isRightSwipe = distance < -minSwipeDistance
         if (isLeftSwipe) {
-            let nextRankingId = ((parseInt(selectedRankingId) + 1) % 6)
-            setTransitionEffect('slide-right');
-            setSelectedRankingId("" + nextRankingId)
+            nextRanking();
         } else if (isRightSwipe) {
-            let nextRankingId = (parseInt(selectedRankingId) - 1)
-            if (nextRankingId < 0) nextRankingId = 5
-            setTransitionEffect('slide-left');
-            setSelectedRankingId("" + nextRankingId)
+            previousRanking();
         }
+    }
+
+    const nextRanking = () => {
+        let nextRankingId = ((parseInt(selectedRankingId) + 1) % 6);
+        setTransitionEffect('slide-right');
+        setSelectedRankingId("" + nextRankingId);
+    }
+
+    const previousRanking = () => {
+        let nextRankingId = (parseInt(selectedRankingId) - 1);
+        if (nextRankingId < 0) nextRankingId = 5
+        setTransitionEffect('slide-left');
+        setSelectedRankingId("" + nextRankingId);
     }
 
     const enableAnimation = (duration) => {
@@ -73,35 +77,29 @@ export const Ranking = ({ playersCount }) => {
         switch (selectedRankingId) {
             case "0": return "by win count";
             case "1": return "by win rate";
-            case "2": return "by win size";
-            case "3": return "by win streak";
-            case "4": return "by point count";
-            case "5": return "by trophy time";
+            case "2": return "by win streak";
+            case "3": return "by win size";
+            case "4": return "by trophy time";
+            case "5": return "by point count";
             default: return "";
         }
     }
 
     return (
         <div className='center flex-column'>
-            <h3>Ranking</h3>
-            {!loading && [...selectedRanking].length > 0 && <React.Fragment>
-                <div className='center flex-row pb-3'>
-                    <ToggleButtonGroup
-                        color="primary"
-                        value={selectedRankingId}
-                        exclusive
-                        disabled={loading}
-                        onChange={selectRanking}
-                        aria-label="Platform"
-                    >
-                        <ToggleButton value="0">01</ToggleButton>
-                        <ToggleButton value="1">02</ToggleButton>
-                        <ToggleButton value="2">03</ToggleButton>
-                        <ToggleButton value="3">04</ToggleButton>
-                        <ToggleButton value="4">05</ToggleButton>
-                        <ToggleButton value="5">06</ToggleButton>
-                    </ToggleButtonGroup>
+            <div className='space-between'>
+                <IconButton aria-label="Left" onClick={previousRanking} >
+                    <KeyboardArrowLeftIcon color="primary" className="ranking-arrow" sx={{ fontSize: '2rem' }} />
+                </IconButton>
+                <div>
+                    <h3 className="mb-0">Ranking</h3>
+                    <p className="mb-0"><small>({getRankingTitle()})</small></p>
                 </div>
+                <IconButton aria-label="Right" onClick={nextRanking} >
+                    <KeyboardArrowRightIcon color="primary" className="ranking-arrow" sx={{ fontSize: '2rem' }} />
+                </IconButton>
+            </div>
+            {!loading && [...selectedRanking].length > 0 && <React.Fragment>
                 <div className='center flex-column mb-4'
                     onTouchStart={onTouchStart}
                     onTouchEnd={onTouchEnd}
@@ -113,13 +111,13 @@ export const Ranking = ({ playersCount }) => {
                             sx={{ pointerEvents: 'none' }}
                             expanded={ false }>
                             <AccordionSummary>
-                                <div className='statistics-item'>
+                                <div className='space-between'>
                                     <span>{_.player}</span>
                                     <span>{_.value} {_.unit}</span>
                                 </div>
                             </AccordionSummary>
                             <AccordionDetails>
-                                <div className='statistics-item'>
+                                <div className='space-between'>
                                     <span>NOT USED</span>
                                 </div>
                             </AccordionDetails>
@@ -136,10 +134,8 @@ export const Ranking = ({ playersCount }) => {
                 </div>
             </React.Fragment>}
             {loading && <div className="mb-4" >
-                <Skeleton animation="wave" variant="rounded" width="80%" height={48} className="my-1 mx-auto" />
-
                 {[...Array(playersCount > rankingLimit ? rankingLimit : playersCount).keys()].map(_ => (
-                    <Skeleton key={_} animation="wave" variant="rounded" width="100%" height={48} className="my-1" />
+                    <Skeleton key={_} animation="wave" variant="rounded" width="100%" height={44} className="my-1" />
                 ))}
 
                 {playersCount > rankingLimit && <Skeleton animation="wave" variant="rounded" width="40%" height={24} className="mt-3 mx-auto" />}

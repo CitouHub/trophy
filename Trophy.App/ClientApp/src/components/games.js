@@ -39,13 +39,13 @@ export const Games = () => {
                             expanded={expandedGame === _.id}
                             onChange={() => handleExpandChange(_.id)} >
                             <AccordionSummary>
-                                <div className='statistics-item'>
+                                <div className='space-between'>
                                     <span>{_.playerResults[0].player.name} - {_.playerResults[1].player.name}</span>
                                     <span>{_.playerResults[0].score} - {_.playerResults[1].score}</span>
                                 </div>
                             </AccordionSummary>
                             <AccordionDetails>
-                                <div className='statistics-item'>
+                                <div className='space-between'>
                                     <span>{_.matchDate.split('T')[0]}</span>
                                     <span>{_.location}</span>
                                 </div>
