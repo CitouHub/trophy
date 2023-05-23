@@ -6,6 +6,7 @@ import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import { PlayerResult } from '../components/player-result.input';
 import * as PlayerService from '../service/player.service';
 import * as GameService from '../service/game.service';
+import { isEnter } from '../util/keyboard.aid';
 
 import trophy from '../assets/trophy.png';
 
@@ -26,6 +27,12 @@ export const Register = () => {
             setLoading(false);
         });
     }, []);
+
+    const checkEnter = (e) => {
+        if (isEnter(e) && isFormValid()) {
+            submitGame();
+        }
+    }
 
     const isFormValid = () => {
         return game.location !== '' &&
@@ -63,6 +70,7 @@ export const Register = () => {
                     playerResult={player1Result}
                     setPlayerResult={result => setPlayer1Result(result)}
                     updatePlayerList={updatePlayerList}
+                    onKeyDown={checkEnter}
                 />
                 <h1>vs.</h1>
                 <PlayerResult
@@ -71,6 +79,7 @@ export const Register = () => {
                     playerResult={player2Result}
                     setPlayerResult={result => setPlayer2Result(result)}
                     updatePlayerList={updatePlayerList}
+                    onKeyDown={checkEnter}
                 />
                 <TextField
                     sx={{ marginTop: '1rem', width: '100%' }}
@@ -78,7 +87,8 @@ export const Register = () => {
                     id="game-location"
                     size="small"
                     type="text"
-                    onChange={e => setGame({...game, location: e.target.value})}
+                    onChange={e => setGame({ ...game, location: e.target.value })}
+                    onKeyDown={checkEnter}
                 />
                 <LoadingButton
                     sx={{ marginTop: '1rem', width: '100%' }}
@@ -88,6 +98,7 @@ export const Register = () => {
                     startIcon={<LibraryAddIcon />}
                     variant="contained"
                     onClick={submitGame}
+                    onKeyDown={checkEnter}
                 >
                     Submit game
                 </LoadingButton>

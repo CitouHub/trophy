@@ -6,7 +6,7 @@ import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import { AddPlayerDialog } from '../components/add-player.dialog';
 
-export const PlayerResult = ({ title, players, playerResult, setPlayerResult, updatePlayerList }) => {
+export const PlayerResult = ({ title, players, playerResult, setPlayerResult, updatePlayerList, onKeyDown }) => {
     const [addPlayerDialogOpen, setAddPlayerDialogOpen] = useState(false);
 
     const handleNewPlayerAdded = (player, existing) => {
@@ -47,6 +47,7 @@ export const PlayerResult = ({ title, players, playerResult, setPlayerResult, up
                 InputLabelProps={{ shrink: true }}
                 inputProps={{ maxLength: 3 }}
                 onChange={e => setPlayerResult({ ...playerResult, score: e.target.value })}
+                onKeyDown={onKeyDown}
             />
             <AddPlayerDialog
                 players={players}
