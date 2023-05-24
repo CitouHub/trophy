@@ -15,7 +15,7 @@ on:
 jobs:
   unit-test:
     runs-on: ubuntu-latest
-    name: Unit Testing
+    name: Unit testing
     steps:
       - uses: actions/checkout@v2.1.0
       - run: dotnet test
@@ -23,7 +23,7 @@ jobs:
   build-app:
     runs-on: ubuntu-latest
     needs: unit-test
-    name: Build App
+    name: Build app
 
     steps:
       - uses: AutoModality/action-clean@v1
