@@ -64,7 +64,7 @@ export const Register = () => {
     if (!loading) {
         return (
             <div className='center flex-column h-100'>
-                <img src={trophy} alt="Trophy" className='mb-4' />
+                <img src={trophy} alt="Trophy" className='mb-4 px-4' />
                 <PlayerResult
                     title={'Player 1'}
                     players={players}

@@ -7,7 +7,7 @@ export const TrophyLoader = ({ center }) => {
 
     return (
         <div className={'center flex-column ' + (center ? 'h-100' : 'pt-4')}>
-            <img src={trophy} alt="Trophy" className='px-5'/>
+            <img src={trophy} alt="Trophy" className='px-4'/>
             <CircularProgress size={80} className='my-4 mx-auto' />
         </div>
     );

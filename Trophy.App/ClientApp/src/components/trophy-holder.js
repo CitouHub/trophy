@@ -15,7 +15,7 @@ export const TrophyHolder = () => {
 
     return (
         <div className='center flex-column'>
-            <img src={trophy} alt="Trophy" className='px-5' />
+            <img src={trophy} alt="Trophy" className='px-4' />
             {player !== '' && <h1>{player}</h1>}
             {player === '' && <Skeleton animation="wave" variant="rounded" width="80%" height="calc(1.375rem + 1.5vw + 0.57rem)" className="skeleton-spacing mx-auto" />}
         </div>
