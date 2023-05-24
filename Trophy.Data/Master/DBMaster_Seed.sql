@@ -45,3 +45,4 @@ FROM @Matches AS M
 
 DELETE Game WHERE (SELECT COUNT(DISTINCT PlayerId) FROM PlayerResult WHERE GameId = Game.Id) = 1
 DELETE Game WHERE (SELECT COUNT(*) FROM PlayerResult WHERE GameId = Game.Id AND Win = 1) <> 1
+DELETE Game WHERE MatchDate >= GETUTCDATE()

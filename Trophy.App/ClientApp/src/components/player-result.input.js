@@ -6,7 +6,7 @@ import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import { AddPlayerDialog } from '../components/add-player.dialog';
 
-export const PlayerResult = ({ title, players, playerResult, setPlayerResult, updatePlayerList, onKeyDown }) => {
+export const PlayerResult = ({ title, players, excludePlayer, playerResult, setPlayerResult, updatePlayerList, onKeyDown }) => {
     const [addPlayerDialogOpen, setAddPlayerDialogOpen] = useState(false);
 
     const handleNewPlayerAdded = (player, existing) => {
@@ -32,7 +32,7 @@ export const PlayerResult = ({ title, players, playerResult, setPlayerResult, up
                             setAddPlayerDialogOpen(true);
                         }
                     }}>
-                    {players.map(p => (
+                    {players.filter(p => p.id !== excludePlayer).map(p => (
                         <MenuItem key={p.id} value={p.id}>{p.name}</MenuItem>
                     ))}
                     <MenuItem key="new" value={-1}>+ Add player</MenuItem>

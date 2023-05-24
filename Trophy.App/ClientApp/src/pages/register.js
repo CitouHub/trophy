@@ -68,6 +68,7 @@ export const Register = () => {
                 <PlayerResult
                     title={'Player 1'}
                     players={players}
+                    excludePlayer={player2Result.player.id}
                     playerResult={player1Result}
                     setPlayerResult={result => setPlayer1Result(result)}
                     updatePlayerList={updatePlayerList}
@@ -77,6 +78,7 @@ export const Register = () => {
                 <PlayerResult
                     title={'Player 2'}
                     players={players}
+                    excludePlayer={player1Result.player.id}
                     playerResult={player2Result}
                     setPlayerResult={result => setPlayer2Result(result)}
                     updatePlayerList={updatePlayerList}
