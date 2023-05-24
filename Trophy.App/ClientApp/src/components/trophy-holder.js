@@ -17,7 +17,7 @@ export const TrophyHolder = () => {
         <div className='center flex-column'>
             <img src={trophy} alt="Trophy" />
             {player !== '' && <h1>{player}</h1>}
-            {player === '' && <Skeleton animation="wave" variant="rounded" width="80%" height={48} className="my-1 mx-auto" />}
+            {player === '' && <Skeleton animation="wave" variant="rounded" width="80%" height="calc(1.375rem + 1.5vw + 0.57rem)" className="skeleton-spacing mx-auto" />}
         </div>
     );
 }

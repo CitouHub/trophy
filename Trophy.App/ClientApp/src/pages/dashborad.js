@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { TrophyHolder } from '../components/trophy-holder';
 import { Ranking } from '../components/ranking';
 import { Games } from '../components/games';
+import { TrophyLoader } from '../components/trophy-loader';
 import * as PlayerService from '../service/player.service';
-
-import trophy from '../assets/trophy.png';
 
 export const Dashboard = () => {
     const [loading, setLoading] = useState(false);
@@ -28,9 +27,7 @@ export const Dashboard = () => {
         );
     } else {
         return (
-            <div className='pt-4 center flex-column'>
-                <img src={trophy} alt="Trophy" />
-            </div>
+            <TrophyLoader center={false} />
         )
     }
 }

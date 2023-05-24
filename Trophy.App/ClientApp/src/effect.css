@@ -26,23 +26,19 @@
 @keyframes slideLeft {
     from {
         margin-left: -100vw;
-        width: 300%;
     }
 
     to {
-        margin-left: 0px;
-        width: 100%;
+        margin-left: 0vw;
     }
 }
 
 @keyframes slideRight {
     from {
         margin-left: 100vw;
-        width: 300%;
     }
 
     to {
-        margin-left: 0px;
-        width: 100%;
+        margin-left: 0vw;
     }
 }

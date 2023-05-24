@@ -4,9 +4,10 @@ import TextField from '@mui/material/TextField';
 import LoadingButton from '@mui/lab/LoadingButton';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import { PlayerResult } from '../components/player-result.input';
+import { TrophyLoader } from '../components/trophy-loader';
+import { isEnter } from '../util/keyboard.aid';
 import * as PlayerService from '../service/player.service';
 import * as GameService from '../service/game.service';
-import { isEnter } from '../util/keyboard.aid';
 
 import trophy from '../assets/trophy.png';
 
@@ -106,9 +107,7 @@ export const Register = () => {
         );
     } else {
         return (
-            <div className='center flex-column h-100'>
-                <img src={trophy} alt="Trophy" />
-            </div>
+            <TrophyLoader center={true} />
         )
     }
 }

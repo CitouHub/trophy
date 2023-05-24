@@ -100,14 +100,13 @@ export const Ranking = ({ playersCount }) => {
                 </IconButton>
             </div>
             {!loading && [...selectedRanking].length > 0 && <React.Fragment>
-                <div className='center flex-column mb-4'
+                <div className={(animationActive ? transitionEffect : '') + ' center flex-column'}
                     onTouchStart={onTouchStart}
                     onTouchEnd={onTouchEnd}
                     onTouchMove={onTouchMove}
                 >
                     {[...selectedRanking].splice(0, (showAll ? 100 : rankingLimit)).map(_ => (
                         <Accordion key={_.player}
-                            className={ animationActive ? transitionEffect : '' }
                             sx={{ pointerEvents: 'none' }}
                             expanded={ false }>
                             <AccordionSummary>
@@ -123,15 +122,15 @@ export const Ranking = ({ playersCount }) => {
                             </AccordionDetails>
                         </Accordion>
                     ))}
-                    {playersCount > rankingLimit && <span className='more-toggle mt-3' onClick={() => {
-                        enableAnimation(1000);
-                        setShowAll(!showAll);
-                        setTransitionEffect('fade-in');
-                    }}
-                    >
-                        {showAll ? 'Show less' : 'Show more'}
-                    </span>}
                 </div>
+                {playersCount > rankingLimit && <span className='more-toggle mt-3  mb-4' onClick={() => {
+                    enableAnimation(1000);
+                    setShowAll(!showAll);
+                    setTransitionEffect('fade-in');
+                }}
+                >
+                    {showAll ? 'Show less' : 'Show more'}
+                </span>}
             </React.Fragment>}
             {loading && <div className="mb-4" >
                 {[...Array(playersCount > rankingLimit ? rankingLimit : playersCount).keys()].map(_ => (

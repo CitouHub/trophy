@@ -81,3 +81,7 @@ code {
     margin-top: auto;
     margin-bottom: auto;
 }
+
+.skeleton-spacing {
+    margin-top: 0.3rem;
+}
