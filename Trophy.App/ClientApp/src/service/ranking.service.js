@@ -1,4 +1,4 @@
-﻿import * as Request from '../util/requesthandler'
+import * as Request from '../util/requesthandler'
 
 export async function getRankings() {
     return await Request.send({
