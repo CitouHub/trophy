@@ -6,8 +6,8 @@ DBCC CHECKIDENT ('dbo.PlayerResult', RESEED, 0)
 DBCC CHECKIDENT ('dbo.Player', RESEED, 0)
 DBCC CHECKIDENT ('dbo.Game', RESEED, 0)
 
-DECLARE @Players INT = 12
-DECLARE @Games INT = 10000
+DECLARE @Players INT = 6
+DECLARE @Games INT = 1000
 
 DECLARE @N TABLE(I INT NOT NULL, R INT NOT NULL)
 INSERT INTO @N
@@ -36,11 +36,11 @@ INSERT INTO @Matches SELECT Game.Id,
 FROM Game
 
 INSERT INTO PlayerResult(GameId, PlayerId, Score, Win)
-SELECT M.GameId, M.P1, M.P1S, CASE WHEN M.P1S > M.P2S THEN 1 ELSE 0 END
+SELECT M.GameId, (M.P1 % @Players) + 1, (M.P1S % @Players) + 1, CASE WHEN M.P1S > M.P2S THEN 1 ELSE 0 END
 FROM @Matches AS M
 
 INSERT INTO PlayerResult(GameId, PlayerId, Score, Win)
-SELECT M.GameId, M.P2, M.P2S, CASE WHEN M.P2S > M.P1S THEN 1 ELSE 0 END
+SELECT M.GameId, (M.P2 % @Players) + 1, (M.P2S % @Players) + 1, CASE WHEN M.P2S > M.P1S THEN 1 ELSE 0 END
 FROM @Matches AS M
 
 DELETE Game WHERE (SELECT COUNT(DISTINCT PlayerId) FROM PlayerResult WHERE GameId = Game.Id) = 1

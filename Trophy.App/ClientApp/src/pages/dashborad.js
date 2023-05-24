@@ -4,6 +4,8 @@ import { Ranking } from '../components/ranking';
 import { Games } from '../components/games';
 import * as PlayerService from '../service/player.service';
 
+import trophy from '../assets/trophy.png';
+
 export const Dashboard = () => {
     const [loading, setLoading] = useState(false);
     const [players, setPlayers] = useState([]);
@@ -25,6 +27,10 @@ export const Dashboard = () => {
             </div>
         );
     } else {
-        return null
+        return (
+            <div className='pt-4 center flex-column'>
+                <img src={trophy} alt="Trophy" />
+            </div>
+        )
     }
 }

@@ -105,6 +105,10 @@ export const Register = () => {
             </div>
         );
     } else {
-        return null;
+        return (
+            <div className='center flex-column h-100'>
+                <img src={trophy} alt="Trophy" />
+            </div>
+        )
     }
 }
