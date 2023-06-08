@@ -9,7 +9,7 @@ namespace Trophy.Service
     {
         Task AddGameAsync(GameDTO gameDto);
         Task<List<GameDTO>> GetGamesAsync();
-        Task<string> GetTrophyHolderAsync();
+        Task<TrophyHolderDTO> GetTrophyHolderAsync();
     }
 
     public class GameService : IGameService
@@ -43,12 +43,17 @@ namespace Trophy.Service
             return _mapper.Map<List<GameDTO>>(games);
         }
 
-        public async Task<string> GetTrophyHolderAsync()
+        public async Task<TrophyHolderDTO> GetTrophyHolderAsync()
         {
-            return await _context.Games
+            var trophyHolderName = await _context.Games
                 .OrderByDescending(_ => _.MatchDate)
                 .Select(_ => _.PlayerResults.First(_ => _.Win).Player.Name)
                 .FirstAsync();
+
+            return new TrophyHolderDTO()
+            {
+                Name = trophyHolderName
+            };
         }
     }
 }

@@ -31,7 +31,7 @@ namespace Trophy.Controllers
 
         [HttpGet]
         [Route("trophy/holder")]
-        public async Task<string> GetTrophyHolderAsync()
+        public async Task<TrophyHolderDTO> GetTrophyHolderAsync()
         {
             return await _gameService.GetTrophyHolderAsync();
         }

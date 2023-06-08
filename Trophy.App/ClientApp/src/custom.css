@@ -5,6 +5,12 @@ html, body {
     height: 100%;
 }
 
+path {
+    stroke: #fff;
+    stroke-width: 0.75;
+    stroke-miterlimit: 4
+}
+
 #root {
     height: 100%;
 }

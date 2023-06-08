@@ -193,7 +193,9 @@ namespace Trophy.Test.Service
             var trophyHolder = await service.GetTrophyHolderAsync();
 
             //Assert
-            Assert.Equal(player3, trophyHolder);
+            Assert.Equal(player3, trophyHolder.Name);
+            Assert.StartsWith("#", trophyHolder.AvatarColor);
+            Assert.Equal(7, trophyHolder.AvatarColor.Length);
         }
     }
 }
